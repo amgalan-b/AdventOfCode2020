@@ -1,0 +1,13 @@
+# GitHub workflow for Swift packages.
+# Note: You need set a secret as GITHUB_PAT that has access to private dependencies.
+---
+name: Lint
+on: [push]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Lint
+        uses: norio-nomura/action-swiftlint@3.0.1
