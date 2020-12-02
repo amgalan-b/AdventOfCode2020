@@ -24,8 +24,7 @@ extension String {
     fileprivate func _isValid() -> Bool {
         let (min, max, character, word) = _parse()
 
-        return Array(word)
-            .count { $0 == character }
+        return word.count { $0 == character }
             .run { (min ... max).contains($0) }
     }
 

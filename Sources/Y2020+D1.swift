@@ -8,7 +8,7 @@ extension Y2020 {
         static func part1() -> Int {
             return File.readLines(file: "2020-1.txt")
                 .map { Int($0)! }
-                .combinations(length: 2)
+                .combinations(ofCount: 2)
                 .first { $0.sum() == 2020 }!
                 .product()
         }
@@ -16,7 +16,7 @@ extension Y2020 {
         static func part2() -> Int {
             return File.readLines(file: "2020-1.txt")
                 .map { Int($0)! }
-                .combinations(length: 3)
+                .combinations(ofCount: 3)
                 .first { $0.sum() == 2020 }!
                 .product()
         }
