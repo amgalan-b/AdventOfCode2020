@@ -7,14 +7,12 @@ extension Y2020 {
 
         static func part1() -> Int {
             return File.readLines(file: "2020-2.txt")
-                .filter { $0._isValid() }
-                .count
+                .count { $0._isValid() }
         }
 
         static func part2() -> Int {
             return File.readLines(file: "2020-2.txt")
-                .filter { $0._isOtherValid() }
-                .count
+                .count { $0._isOtherValid() }
         }
     }
 }
