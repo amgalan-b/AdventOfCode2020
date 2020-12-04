@@ -22,7 +22,7 @@ extension Y2020 {
     }
 }
 
-extension Array where Element == Array<Character> {
+extension Array where Element == [Character] {
 
     fileprivate func _countTrees(right: Int, down: Int) -> Int {
         let width = self[0].count
