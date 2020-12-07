@@ -8,16 +8,16 @@ extension Y2020 {
 
         static func part1() -> Int {
             return File.readLines(file: "2020-7.txt")
-                .map { $0._parseRule() }
-                ._makeGraph()
+                .map { _Rule($0) }
+                .run { WeightedGraph(rules: $0) }
                 .filter { !$0.dfs(from: $1, to: "shiny gold").isEmpty }
                 .count
         }
 
         static func part2() -> Int {
             return File.readLines(file: "2020-7.txt")
-                .map { $0._parseRule() }
-                ._makeGraph()
+                .map { _Rule($0) }
+                .run { WeightedGraph(rules: $0) }
                 ._totalBags(for: "shiny gold")
         }
     }
@@ -27,39 +27,29 @@ private struct _Rule {
 
     let name: String
     let children: [String: Int]
-}
 
-extension String {
-
-    fileprivate func _parseRule() -> _Rule {
-        var colors = regexMatches(regex: "([0-9] |^)[a-z]+ [a-z]+")
+    init(_ raw: String) {
+        var colors = raw.regexMatches(regex: "([0-9] |^)[a-z]+ [a-z]+")
             .map { $0.match }
 
-        return _Rule(
-            name: colors.removeFirst(),
-            children: colors
-                .map { ($0[2...], Int($0[0])!) }
-                .run { Dictionary(uniqueKeysWithValues: $0) }
-        )
-    }
-}
-
-extension Array where Element == _Rule {
-
-    fileprivate func _makeGraph() -> WeightedGraph<String, Int> {
-        let graph = WeightedGraph<String, Int>(vertices: map { $0.name })
-
-        for rule in self {
-            for child in rule.children {
-                graph.addEdge(from: rule.name, to: child.key, weight: child.value, directed: true)
-            }
-        }
-
-        return graph
+        name = colors.removeFirst()
+        children = colors
+            .map { ($0[2...], Int($0[0])!) }
+            .run { Dictionary(uniqueKeysWithValues: $0) }
     }
 }
 
 extension WeightedGraph where V == String, W == Int {
+
+    fileprivate convenience init(rules: [_Rule]) {
+        self.init(vertices: rules.map { $0.name })
+
+        for rule in rules {
+            for child in rule.children {
+                addEdge(from: rule.name, to: child.key, weight: child.value, directed: true)
+            }
+        }
+    }
 
     fileprivate func _totalBags(for vertex: String) -> Int {
         let edges = edgesForVertex(vertex)!
@@ -96,8 +86,8 @@ final class Y2020_D7_Tests: XCTestCase {
             dark violet bags contain no other bags.
             """
             .components(separatedBy: .newlines)
-            .map { $0._parseRule() }
-            ._makeGraph()
+            .map { _Rule($0) }
+            .run { WeightedGraph(rules: $0) }
             ._totalBags(for: "shiny gold")
 
         XCTAssertEqual(result, 126)
