@@ -10,7 +10,7 @@ extension Y2020 {
             return File.readLines(file: "2020-7.txt")
                 .map { _Rule($0) }
                 .run { WeightedGraph(rules: $0) }
-                .filter { !$0.dfs(from: $1, to: "shiny gold").isEmpty }
+                .filter { $0.pathExists(from: $1, to: "shiny gold") }
                 .count
         }
 
