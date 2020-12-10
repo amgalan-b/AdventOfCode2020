@@ -14,7 +14,8 @@ extension Y2020 {
         static func part2() -> Int {
             return File.readLines(file: "2020-9.txt")
                 .map { Int($0)! }
-                .firstSubsequence { $0.sum() == 1721308972 }!
+                .subsequences()
+                .first { $0.sum() == 1721308972 }!
                 .run { $0.min()! + $0.max()! }
         }
     }
